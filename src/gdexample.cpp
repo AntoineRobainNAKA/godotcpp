@@ -1,5 +1,6 @@
 #include "gdexample.h"
 #include <godot_cpp/core/class_db.hpp>
+#include <godot_cpp/variant/utility_functions.hpp>
 
 using namespace godot;
 
@@ -44,7 +45,7 @@ void GDExample::_process(double delta) {
 	time_emit += delta;
 	if (time_emit > 1.0) {
 		emit_signal("position_changed", this, new_position);
-
+		// UtilityFunctions::print("position_changed");
 		time_emit = 0.0;
 	}
 }
