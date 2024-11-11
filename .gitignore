@@ -1,4 +1,6 @@
-.idea/*
+.idea/
+.vs/
+.vscode/
 # Godot auto generated files
 *.gen.*
 .godot/
