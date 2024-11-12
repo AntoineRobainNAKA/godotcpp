@@ -21,7 +21,7 @@ namespace godot {
         ~GridWorldNode();
 
         String launch_policy_iteration(const int rows, const int columns);
-        void launch_q_learning();
+        String launch_q_learning();
 
         void _process(double delta) override;
     };
