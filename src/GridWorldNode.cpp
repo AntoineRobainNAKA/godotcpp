@@ -39,7 +39,7 @@ void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
+    current_calculation = std::async(std::launch::async, []() { // []() is lambda declaration 
         // Pas trouvé le moyen de passer la taille en paramètre
         // C'est une connerie avec le template qui exige des const
         GridWorld<5, 5> gridworld;
