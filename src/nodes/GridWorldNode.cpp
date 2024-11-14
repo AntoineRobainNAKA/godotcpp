@@ -1,6 +1,7 @@
 #include "GridWorldNode.h"
 #include "algorithms/PolicyIteration.h"
 #include "algorithms/QLearning.h"
+#include "algorithms/ValueIteration.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <sstream>
@@ -10,6 +11,7 @@ using namespace godot;
 void GridWorldNode::_bind_methods() {
     ClassDB::bind_method(D_METHOD("launch_policy_iteration"), &GridWorldNode::launch_policy_iteration);
     ClassDB::bind_method(D_METHOD("launch_q_learning"), &GridWorldNode::launch_q_learning);
+    ClassDB::bind_method(D_METHOD("launch_value_iteration"), &GridWorldNode::launch_value_iteration);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &GridWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &GridWorldNode::get_result);
 }
@@ -76,6 +78,27 @@ void GridWorldNode::launch_q_learning() {
             for (std::size_t a = 0; a < q_s.size(); ++a) {
                 ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
             }
+        }
+
+        return String(ss.str().c_str());
+    });
+}
+
+void GridWorldNode::launch_value_iteration() {
+    if (calculation_pending) {
+        UtilityFunctions::print("Calculation already in progress!");
+        return;
+    }
+
+    calculation_pending = true;
+
+    current_calculation = std::async(std::launch::async, []() {
+        GridWorld<5, 5> gridworld;
+        auto value_function_gridworld = value_iteration(gridworld, 0.9f, 0.0001f);
+
+        std::stringstream ss;
+        for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
+            ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
         }
 
         return String(ss.str().c_str());

@@ -19,7 +19,11 @@ func _process(delta: float) -> void:
 		print("Q-Learning on LineWorld")
 		launch_q_learning()
 		calculationComplete = false
-		
+	
+	if (Input.is_action_just_pressed("ui_right")):
+		print("Value Iteration on LineWorld")
+		launch_value_iteration()
+		calculationComplete = false
 		
 	if is_calculation_complete():
 		var result = get_result()

@@ -20,6 +20,11 @@ func _process(delta: float) -> void:
 		launch_q_learning()
 		calculationComplete = false
 		
+	if (Input.is_key_label_pressed(KEY_A)):
+		print("Value Iteration on GridWorld")
+		launch_value_iteration()
+		calculationComplete = false
+		
 		
 	if is_calculation_complete():
 		var result = get_result()

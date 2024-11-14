@@ -28,6 +28,7 @@ namespace godot {
 
         void launch_policy_iteration(const int rows, const int columns);
         void launch_q_learning();
+        void launch_value_iteration();
         bool is_calculation_complete() const;
         String get_result();
 

@@ -1,6 +1,7 @@
 #include "LineWorldNode.h"
 #include "algorithms/PolicyIteration.h"
 #include "algorithms/QLearning.h"
+#include "algorithms/ValueIteration.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 #include <sstream>
@@ -10,6 +11,7 @@ using namespace godot;
 void LineWorldNode::_bind_methods() {
     ClassDB::bind_method(D_METHOD("launch_policy_iteration"), &LineWorldNode::launch_policy_iteration);
     ClassDB::bind_method(D_METHOD("launch_q_learning"), &LineWorldNode::launch_q_learning);
+    ClassDB::bind_method(D_METHOD("launch_value_iteration"), &LineWorldNode::launch_value_iteration);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &LineWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &LineWorldNode::get_result);
 }
@@ -72,6 +74,27 @@ void LineWorldNode::launch_q_learning() {
             for (std::size_t a = 0; a < q_s.size(); ++a) {
                 ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
             }
+        }
+
+        return String(ss.str().c_str());
+    });
+}
+
+void LineWorldNode::launch_value_iteration() {
+    if (calculation_pending) {
+        UtilityFunctions::print("Calculation already in progress!");
+        return;
+    }
+
+    calculation_pending = true;
+
+    current_calculation = std::async(std::launch::async, []() {
+        LineWorld<5> lineworld;
+        auto value_function_lineworld = value_iteration(lineworld, 0.9f, 0.0001f);
+
+        std::stringstream ss;
+        for (std::size_t s = 0; s < value_function_lineworld.size(); ++s) {
+            ss << "V(s=" << s << ") = " << value_function_lineworld[s] << std::endl;
         }
 
         return String(ss.str().c_str());
