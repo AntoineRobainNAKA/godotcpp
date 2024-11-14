@@ -1,8 +1,8 @@
 #include "register_types.h"
 
-#include "gdexample.h"
-#include "GridWorldNode.h"
-#include "LineWorldNode.h"
+#include "nodes/gdexample.h"
+#include "nodes/GridWorldNode.h"
+#include "nodes/LineWorldNode.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>

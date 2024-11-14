@@ -43,7 +43,7 @@ void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
         // Pas trouvé le moyen de passer la taille en paramètre
         // C'est une connerie avec le template qui exige des const
         GridWorld<5, 5> gridworld;
-        auto [pi_gridworld, value_function_gridworld] = policy_iteration(gridworld, 0.999f, 0.001f);
+        auto [pi_gridworld, value_function_gridworld] = policy_iteration(gridworld, 0.9f, 0.0001f);
 
         std::stringstream ss;
 
@@ -68,7 +68,7 @@ void GridWorldNode::launch_q_learning() {
 
     current_calculation = std::async(std::launch::async, []() {
         GridWorld<5,5> gridworld;
-        auto q_values_gridworld = q_learning<GridWorld<5, 5>>(10000, 0.1f, 0.999f, 1.0f);
+        auto q_values_gridworld = q_learning<GridWorld<5, 5>>(10000, 0.1f, 0.9f, 1.0f);
         std::stringstream ss;
 
         for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {

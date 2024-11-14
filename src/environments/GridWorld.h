@@ -65,33 +65,38 @@ public:
 
         int next_row = current_row;
         int next_col = current_col;
-        
-        if (action == UP) {
-            next_row = std::max(0, current_row - 1);
-        } else if (action == DOWN) {
-            next_row = std::min(static_cast<int>(ROWS - 1), current_row + 1);
-        } else if (action == LEFT) {
-             next_col = std::max(0, current_col - 1);
-        } else if (action == RIGHT) {
-            next_col = std::min(static_cast<int>(COLS - 1), current_col + 1);
+
+        // Determine the intended next position based on the action
+        switch (action) {
+            case UP:    next_row = current_row - 1; break;
+            case DOWN:  next_row = current_row + 1; break;
+            case LEFT:  next_col = current_col - 1; break;
+            case RIGHT: next_col = current_col + 1; break;
         }
 
-        int next_state_index = next_row * COLS + next_col;
+        // Check if the intended next position is valid
+        if (next_row < 0 || next_row >= static_cast<int>(ROWS) ||
+            next_col < 0 || next_col >= static_cast<int>(COLS)) {
+            // If the intended position is out of bounds, the agent stays in the current position
+            next_row = current_row;
+            next_col = current_col;
+        }
 
-        if (next_state_index == next_state) {
-            int reward = 0;
+        std::size_t computed_next_state = next_row * COLS + next_col;
 
+        // Calculate the transition probability
+        if (computed_next_state == next_state) {
+            // If the agent reaches the goal state, return 1.0 for the goal reward index
             if (next_row == goal_row && next_col == goal_col) {
-                reward = 1;
-            } else {
-                reward = 0;
+                return (reward_index == 1) ? 1.0f : 0.0f;
             }
-
-            if (reward_index == static_cast<std::size_t>(reward)) {
-                return 1.0f;
+            // If the agent doesn't reach the goal, return 1.0 for the non-goal reward index
+            else {
+                return (reward_index == 0) ? 1.0f : 0.0f;
             }
         }
 
+        // If the next state doesn't match the computed next state, the transition probability is 0.0
         return 0.0f;
     }
 
@@ -101,7 +106,7 @@ public:
     }
 
     [[nodiscard]] float score() const override {
-        return reward(is_game_over() ? 1.0f : -0.1f);
+        return reward(is_game_over() ? 1 : 0);
     }
 
     [[nodiscard]] std::size_t state_id() const override {
@@ -146,6 +151,7 @@ public:
             if (current_col < COLS - 1) {
                 current_col++;
             }
+            break;
         default:
             break;
         }
