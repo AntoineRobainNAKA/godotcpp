@@ -14,7 +14,13 @@ env = SConscript("godot-cpp/SConstruct")
 
 # tweak this if you want to use different folders, or more folders, to store your source code in.
 env.Append(CPPPATH=["src/"])
+# Le /**/ pour chopper recursivement tous les sous dossiers
 sources = Glob("src/*.cpp")
+sources += Glob("src/**/*.cpp")
+
+print("Found the following source files:")
+for source in sources:
+    print(source)
 
 if env["platform"] == "macos":
     library = env.SharedLibrary(

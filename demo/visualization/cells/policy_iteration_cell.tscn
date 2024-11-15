@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://e3aim4ye40bj"]
+
+[ext_resource type="Script" path="res://visualization/cells/policy_iteration_cell.gd" id="1_hn8ou"]
+
+[node name="PolicyIterationCell" type="PanelContainer"]
+script = ExtResource("1_hn8ou")

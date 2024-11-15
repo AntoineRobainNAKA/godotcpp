@@ -1,14 +1,31 @@
-[gd_scene load_steps=3 format=3 uid="uid://dtr4pagnb4r4c"]
+[gd_scene load_steps=7 format=3 uid="uid://dtr4pagnb4r4c"]
 
 [ext_resource type="Script" path="res://main.gd" id="1_uyyca"]
 [ext_resource type="Texture2D" uid="uid://hb5ew1i7pmbj" path="res://icon.svg" id="2_7l2w7"]
+[ext_resource type="Script" path="res://environments/grid_world_node.gd" id="3_uwi8i"]
+[ext_resource type="Script" path="res://environments/line_world_node.gd" id="4_0xy0k"]
+[ext_resource type="PackedScene" uid="uid://bdieyo4p65pxs" path="res://visualization/grid_visualizer.tscn" id="5_h8713"]
+[ext_resource type="PackedScene" uid="uid://e3aim4ye40bj" path="res://visualization/cells/policy_iteration_cell.tscn" id="6_dwblx"]
 
 [node name="Main" type="Node2D"]
 script = ExtResource("1_uyyca")
 
 [node name="GDExample" type="GDExample" parent="."]
-position = Vector2(0.00261029, 19.303)
+position = Vector2(8.72216, 19.9539)
 texture = ExtResource("2_7l2w7")
 centered = false
+
+[node name="GridWorldNode" type="GridWorldNode" parent="."]
+script = ExtResource("3_uwi8i")
+
+[node name="LineWorldNode" type="LineWorldNode" parent="."]
+script = ExtResource("4_0xy0k")
+
+[node name="GridVisualizer" parent="." instance=ExtResource("5_h8713")]
+offset_right = 0.0
+offset_bottom = 0.0
+size_flags_horizontal = 4
+size_flags_vertical = 4
+policy_iteration_cell = ExtResource("6_dwblx")
 
 [connection signal="position_changed" from="GDExample" to="." method="_on_gd_example_position_changed"]
