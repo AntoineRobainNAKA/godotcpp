@@ -1,4 +1,7 @@
+class_name GridCell
 extends PanelContainer
+
+# base class for grid cells
 
 signal cell_clicked(cell_index: int)
 
