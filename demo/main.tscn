@@ -11,7 +11,7 @@
 script = ExtResource("1_uyyca")
 
 [node name="GDExample" type="GDExample" parent="."]
-position = Vector2(1.04068, 2.60118)
+position = Vector2(16.9578, 15.4562)
 texture = ExtResource("2_7l2w7")
 centered = false
 

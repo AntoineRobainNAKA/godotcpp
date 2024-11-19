@@ -7,7 +7,6 @@
 #include <memory>
 #include <future>
 
-
 namespace godot {
     class LineWorldNode : public Node {
         GDCLASS(LineWorldNode, Node);

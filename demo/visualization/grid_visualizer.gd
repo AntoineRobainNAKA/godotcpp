@@ -102,10 +102,18 @@ func update_policy_iteration_data(values: Array, policies: Array) -> void:
 			cells[i].update_data("policy", policies[i])
 
 func parse_value_iteration_results(result_text: String) -> void:
-	pass
+	var values = []
+	
+	for line in result_text.split("\n"):
+		values.append(int(line.split("=")[2]))
+	
+	update_value_iteration_data(values)
 
 func update_value_iteration_data(values: Array) -> void:
-	pass
+	var cells = grid_container.get_children()
+	for i in range(cells.size()):
+		if i < values.size():
+			cells[i].update_data("value", values[i])
 
 func parse_q_learning_results(result_text: String) -> void:
 	pass
