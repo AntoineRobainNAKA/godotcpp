@@ -23,21 +23,26 @@ func _ready() -> void:
 	setup_grid()
 	
 func setup_grid() -> void:
-	grid_container = GridContainer.new()
-	add_child(grid_container)
+	if grid_container == null:
+		grid_container = GridContainer.new()
+		add_child(grid_container)
 	grid_container.columns = environment_size.x
 
-func generate_grid(algorithm: AlgorithmType) -> void:
+func generate_grid(algorithm: AlgorithmType, grid_size: Vector2i) -> void:
 	current_algorithm = algorithm
 
-	# Clear existing cells
-	for child in grid_container.get_children():
-		child.queue_free()
-	
 	var cell_scene = get_cell_scene_for_algorithm(algorithm)
 	if cell_scene == null:
 		push_error("No cell scene set for algorithm type: " + str(algorithm))
 		return
+
+	# Clear existing cells
+	for child in grid_container.get_children():
+		child.queue_free()
+
+	if grid_size != environment_size:
+		environment_size = grid_size
+		setup_grid()
 	
 	var total_cells = environment_size.x * environment_size.y
 
@@ -59,10 +64,10 @@ func get_cell_scene_for_algorithm(algorithm: AlgorithmType) -> PackedScene:
 		_:
 			return null
 			
-func update_visualization(algorithm: AlgorithmType, result: String) -> void:
+func update_visualization(algorithm: AlgorithmType, result: String, grid_size: Vector2i) -> void:
 	# If grid isn't generated or algorithm changed, generate new grid
 	if grid_container.get_child_count() == 0 or current_algorithm != algorithm:
-		generate_grid(algorithm)
+		generate_grid(algorithm, grid_size)
 	
 	match algorithm:
 		AlgorithmType.POLICY_ITERATION:
@@ -71,12 +76,6 @@ func update_visualization(algorithm: AlgorithmType, result: String) -> void:
 			parse_value_iteration_results(result)
 		AlgorithmType.Q_LEARNING:
 			parse_q_learning_results(result)
-
-# Call this when you get new results from your algorithm
-func update_grid_size(rows: int, cols: int) -> void:
-	environment_size = Vector2i(cols, rows)
-	grid_container.columns = cols
-	generate_grid(current_algorithm)
 
 func parse_policy_iteration_results(result_text: String) -> void:
 	var values = []

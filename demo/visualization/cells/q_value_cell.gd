@@ -20,10 +20,3 @@ func refresh_display() -> void:
 			
 		q_label.text = "Q(%s): %.2f" % [direction, cell_data["q"][i]]
 		container.add_child(q_label)
-		
-	# Display value if it exists
-	if "value" in cell_data:
-		var value_label = Label.new()
-		value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-		value_label.text = "V: %.2f" % cell_data["value"]
-		container.add_child(value_label)
