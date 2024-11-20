@@ -68,11 +68,9 @@ func update_visualization(algorithm: AlgorithmType, result: String) -> void:
 		AlgorithmType.POLICY_ITERATION:
 			parse_policy_iteration_results(result)
 		AlgorithmType.VALUE_ITERATION:
-			#parse_value_iteration_results(result)
-			pass
+			parse_value_iteration_results(result)
 		AlgorithmType.Q_LEARNING:
-			#parse_q_learning_results(result)
-			pass
+			parse_q_learning_results(result)
 
 # Call this when you get new results from your algorithm
 func update_grid_size(rows: int, cols: int) -> void:
@@ -105,7 +103,9 @@ func parse_value_iteration_results(result_text: String) -> void:
 	var values = []
 	
 	for line in result_text.split("\n"):
-		values.append(int(line.split("=")[2]))
+		if line.begins_with("V"):
+			var value = float(line.split("=")[2])
+			values.append(value)
 	
 	update_value_iteration_data(values)
 
@@ -116,10 +116,29 @@ func update_value_iteration_data(values: Array) -> void:
 			cells[i].update_data("value", values[i])
 
 func parse_q_learning_results(result_text: String) -> void:
-	pass
+	var qs = []
+	var num_actions = 4
+	var cur_num_actions = 0
+	var state_q = []
+	
+	for line in result_text.split("\n"):
+		if line.begins_with("Q"):
+			var value = float(line.split("=")[3])
+			state_q.append(value)
+			cur_num_actions += 1
+			
+			if cur_num_actions == num_actions:
+				qs.append(state_q)
+				state_q = [] 
+				cur_num_actions = 0
+	
+	update_q_learning_data(qs)
 
-func update_q_learning_data(data) -> void:
-	pass
+func update_q_learning_data(qs: Array) -> void:
+	var cells = grid_container.get_children()
+	for i in range(cells.size()):
+		if i < qs.size():
+			cells[i].update_data("q", qs[i])
 
 func _on_cell_clicked(cell_index: int) -> void:
 	print("Cell clicked: ", cell_index)

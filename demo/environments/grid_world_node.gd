@@ -39,6 +39,7 @@ func _process(delta: float) -> void:
 		print("Took " + str(calculationTime) + " seconds")
 		calculationTime = 0.0
 		grid_vis.update_visualization(algorithm_type, result)
+		algorithm_type = GridVisualizer.AlgorithmType.NONE
 		
 		
 	if !calculationComplete:
