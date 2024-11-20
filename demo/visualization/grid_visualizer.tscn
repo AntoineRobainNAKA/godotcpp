@@ -1,8 +1,14 @@
-[gd_scene load_steps=2 format=3 uid="uid://bdieyo4p65pxs"]
+[gd_scene load_steps=5 format=3 uid="uid://bdieyo4p65pxs"]
 
 [ext_resource type="Script" path="res://visualization/grid_visualizer.gd" id="1_nlovf"]
+[ext_resource type="PackedScene" uid="uid://e3aim4ye40bj" path="res://visualization/cells/policy_iteration_cell.tscn" id="2_yevir"]
+[ext_resource type="PackedScene" uid="uid://cls0wv0iwg352" path="res://visualization/cells/q_value_cell.tscn" id="3_0mcf2"]
+[ext_resource type="PackedScene" uid="uid://c6e8ltnxxiib2" path="res://visualization/cells/value_iteration_cell.tscn" id="3_0qsi8"]
 
 [node name="MarginContainer" type="MarginContainer"]
 offset_right = 40.0
 offset_bottom = 40.0
 script = ExtResource("1_nlovf")
+policy_iteration_cell = ExtResource("2_yevir")
+q_learning_cell = ExtResource("3_0mcf2")
+value_iteration_cell = ExtResource("3_0qsi8")

@@ -1,0 +1,6 @@
+[gd_scene load_steps=2 format=3 uid="uid://c6e8ltnxxiib2"]
+
+[ext_resource type="Script" path="res://visualization/cells/value_iteration_cell.gd" id="1_5rrgn"]
+
+[node name="ValueIterationCell" type="PanelContainer"]
+script = ExtResource("1_5rrgn")

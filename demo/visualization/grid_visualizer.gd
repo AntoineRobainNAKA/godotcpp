@@ -23,21 +23,26 @@ func _ready() -> void:
 	setup_grid()
 	
 func setup_grid() -> void:
-	grid_container = GridContainer.new()
-	add_child(grid_container)
+	if grid_container == null:
+		grid_container = GridContainer.new()
+		add_child(grid_container)
 	grid_container.columns = environment_size.x
 
-func generate_grid(algorithm: AlgorithmType) -> void:
+func generate_grid(algorithm: AlgorithmType, grid_size: Vector2i) -> void:
 	current_algorithm = algorithm
 
-	# Clear existing cells
-	for child in grid_container.get_children():
-		child.queue_free()
-	
 	var cell_scene = get_cell_scene_for_algorithm(algorithm)
 	if cell_scene == null:
 		push_error("No cell scene set for algorithm type: " + str(algorithm))
 		return
+
+	# Clear existing cells
+	for child in grid_container.get_children():
+		child.queue_free()
+
+	if grid_size != environment_size:
+		environment_size = grid_size
+		setup_grid()
 	
 	var total_cells = environment_size.x * environment_size.y
 
@@ -59,26 +64,18 @@ func get_cell_scene_for_algorithm(algorithm: AlgorithmType) -> PackedScene:
 		_:
 			return null
 			
-func update_visualization(algorithm: AlgorithmType, result: String) -> void:
+func update_visualization(algorithm: AlgorithmType, result: String, grid_size: Vector2i) -> void:
 	# If grid isn't generated or algorithm changed, generate new grid
 	if grid_container.get_child_count() == 0 or current_algorithm != algorithm:
-		generate_grid(algorithm)
+		generate_grid(algorithm, grid_size)
 	
 	match algorithm:
 		AlgorithmType.POLICY_ITERATION:
 			parse_policy_iteration_results(result)
 		AlgorithmType.VALUE_ITERATION:
-			#parse_value_iteration_results(result)
-			pass
+			parse_value_iteration_results(result)
 		AlgorithmType.Q_LEARNING:
-			#parse_q_learning_results(result)
-			pass
-
-# Call this when you get new results from your algorithm
-func update_grid_size(rows: int, cols: int) -> void:
-	environment_size = Vector2i(cols, rows)
-	grid_container.columns = cols
-	generate_grid(current_algorithm)
+			parse_q_learning_results(result)
 
 func parse_policy_iteration_results(result_text: String) -> void:
 	var values = []
@@ -102,16 +99,45 @@ func update_policy_iteration_data(values: Array, policies: Array) -> void:
 			cells[i].update_data("policy", policies[i])
 
 func parse_value_iteration_results(result_text: String) -> void:
-	pass
+	var values = []
+	
+	for line in result_text.split("\n"):
+		if line.begins_with("V"):
+			var value = float(line.split("=")[2])
+			values.append(value)
+	
+	update_value_iteration_data(values)
 
 func update_value_iteration_data(values: Array) -> void:
-	pass
+	var cells = grid_container.get_children()
+	for i in range(cells.size()):
+		if i < values.size():
+			cells[i].update_data("value", values[i])
 
 func parse_q_learning_results(result_text: String) -> void:
-	pass
+	var qs = []
+	var num_actions = 4
+	var cur_num_actions = 0
+	var state_q = []
+	
+	for line in result_text.split("\n"):
+		if line.begins_with("Q"):
+			var value = float(line.split("=")[3])
+			state_q.append(value)
+			cur_num_actions += 1
+			
+			if cur_num_actions == num_actions:
+				qs.append(state_q)
+				state_q = [] 
+				cur_num_actions = 0
+	
+	update_q_learning_data(qs)
 
-func update_q_learning_data(data) -> void:
-	pass
+func update_q_learning_data(qs: Array) -> void:
+	var cells = grid_container.get_children()
+	for i in range(cells.size()):
+		if i < qs.size():
+			cells[i].update_data("q", qs[i])
 
 func _on_cell_clicked(cell_index: int) -> void:
 	print("Cell clicked: ", cell_index)

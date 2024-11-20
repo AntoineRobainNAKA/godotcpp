@@ -10,7 +10,6 @@ var algorithm_type: GridVisualizer.AlgorithmType = GridVisualizer.AlgorithmType.
 func _ready() -> void:
 	pass # Replace with function body.
 
-
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
 	if (Input.is_action_just_pressed("ui_accept")):
@@ -38,8 +37,8 @@ func _process(delta: float) -> void:
 		calculationComplete = true
 		print("Took " + str(calculationTime) + " seconds")
 		calculationTime = 0.0
-		grid_vis.update_visualization(algorithm_type, result)
-		
-		
+		grid_vis.update_visualization(algorithm_type, result, Vector2i(5, 5))
+		algorithm_type = GridVisualizer.AlgorithmType.NONE
+				
 	if !calculationComplete:
 		calculationTime += delta
