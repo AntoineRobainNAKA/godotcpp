@@ -1,10 +1,4 @@
-//
 // Created by vidal on 10/12/2024.
-//
-
-#ifndef INC_5A_RVJV_FULL_CPP_TEMPLATE_POLICYITERATION_H
-#define INC_5A_RVJV_FULL_CPP_TEMPLATE_POLICYITERATION_H
-
 
 #include <vector>
 #include <utility>
@@ -110,5 +104,3 @@ policy_iteration(const TEnv& env, float gamma, float theta) {
 
     return { pi, value_function };
 }
-
-#endif //INC_5A_RVJV_FULL_CPP_TEMPLATE_POLICYITERATION_H

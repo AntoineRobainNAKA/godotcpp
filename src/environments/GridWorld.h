@@ -8,9 +8,10 @@
 #include "../contracts/MDPEnv.h"
 #include "../contracts/ModelFreeEnv.h"
 
-template <std::size_t ROWS, std::size_t COLS>
-class [[maybe_unused]] GridWorld : public MDPEnv, public ModelFreeEnv {
+class GridWorld : public MDPEnv, public ModelFreeEnv {
 private:
+    std::size_t rows;
+    std::size_t cols;
     std::size_t current_row;
     std::size_t current_col;
     std::size_t goal_row;
@@ -24,10 +25,10 @@ private:
     };
 
 public:
-    GridWorld() : current_row(0), current_col(0), goal_row(ROWS - 1), goal_col(COLS - 1) {}
-
-    explicit GridWorld(std::size_t initial_row, std::size_t inital_col, std::size_t goal_row, std::size_t goal_col)
-        : current_row(initial_row), current_col(inital_col), goal_row(goal_row), goal_col(goal_col) {} 
+    GridWorld(std::size_t r, std::size_t c) 
+        : rows(r), cols(c), 
+          current_row(0), current_col(0), 
+          goal_row(r - 1), goal_col(c - 1) {}
 
     void reset() override {
         current_row = 0;
@@ -36,7 +37,7 @@ public:
 
     // MDPEnv methods implementations
     [[nodiscard]] std::size_t num_states() const override {
-        return ROWS * COLS;
+        return rows * cols;
     }
 
     [[nodiscard]] std::size_t num_actions() const override {
@@ -60,8 +61,8 @@ public:
 
     [[nodiscard]] float transition_probability(std::size_t state, std::size_t action,
                                                 std::size_t next_state, std::size_t reward_index) const override {
-        int current_row = state / COLS;
-        int current_col = state % COLS;
+        int current_row = state / cols;
+        int current_col = state % cols;
 
         int next_row = current_row;
         int next_col = current_col;
@@ -75,14 +76,14 @@ public:
         }
 
         // Check if the intended next position is valid
-        if (next_row < 0 || next_row >= static_cast<int>(ROWS) ||
-            next_col < 0 || next_col >= static_cast<int>(COLS)) {
+        if (next_row < 0 || next_row >= static_cast<int>(rows) ||
+            next_col < 0 || next_col >= static_cast<int>(cols)) {
             // If the intended position is out of bounds, the agent stays in the current position
             next_row = current_row;
             next_col = current_col;
         }
 
-        std::size_t computed_next_state = next_row * COLS + next_col;
+        std::size_t computed_next_state = next_row * cols + next_col;
 
         // Calculate the transition probability
         if (computed_next_state == next_state) {
@@ -110,7 +111,7 @@ public:
     }
 
     [[nodiscard]] std::size_t state_id() const override {
-        return current_row * COLS + current_col;
+        return current_row * cols + current_col;
     }
     
     [[nodiscard]] bool is_forbidden(std::size_t action) const override {
@@ -136,7 +137,7 @@ public:
             break;
         
         case DOWN:
-            if (current_row  < ROWS - 1) {
+            if (current_row  < rows - 1) {
                 current_row++;
             }
             break;
@@ -148,7 +149,7 @@ public:
             break;
 
         case RIGHT:
-            if (current_col < COLS - 1) {
+            if (current_col < cols - 1) {
                 current_col++;
             }
             break;

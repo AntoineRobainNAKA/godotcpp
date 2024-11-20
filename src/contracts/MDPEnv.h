@@ -1,9 +1,5 @@
-//
 // Created by vidal on 10/12/2024.
-//
-
-#ifndef INC_5A_RVJV_FULL_CPP_TEMPLATE_MDPENV_H
-#define INC_5A_RVJV_FULL_CPP_TEMPLATE_MDPENV_H
+#pragma once
 
 #include <cstddef>
 
@@ -22,6 +18,3 @@ public:
     [[maybe_unused]] [[nodiscard]] virtual float transition_probability(std::size_t state, std::size_t action,
                                          std::size_t next_state, std::size_t reward_index) const = 0;
 };
-
-
-#endif //INC_5A_RVJV_FULL_CPP_TEMPLATE_MDPENV_H

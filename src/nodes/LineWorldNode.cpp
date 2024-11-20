@@ -32,16 +32,16 @@ LineWorldNode::~LineWorldNode() {
 }
 
 // normalement ce qui est fourni par le prof est bon
-void LineWorldNode::launch_policy_iteration(const int rows, const int columns) {
+void LineWorldNode::launch_policy_iteration(const int cells) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progres !");
         return;
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
+    current_calculation = std::async(std::launch::async, [cells]() {
         // Pas trouvé le moyen de passer la taille en paramètre
-        LineWorld<5> lineworld;
+        LineWorld lineworld(cells);
         auto [pi_lineworld, value_function_lineworld] = policy_iteration(lineworld, 0.999f, 0.001f);
 
         std::stringstream ss;
@@ -57,16 +57,16 @@ void LineWorldNode::launch_policy_iteration(const int rows, const int columns) {
     });
 }
 
-void LineWorldNode::launch_q_learning() {
+void LineWorldNode::launch_q_learning(const int cells) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress !");
         return;
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
-        LineWorld<5> lineworld;
-        auto q_values_lineworld = q_learning<LineWorld<5>>(10000, 0.1f, 0.999f, 1.0f);
+    current_calculation = std::async(std::launch::async, [cells]() {
+        LineWorld lineworld(cells);
+        auto q_values_lineworld = q_learning(lineworld, 10000, 0.1f, 0.999f, 1.0f);
         std::stringstream ss;
 
         for (std::size_t s = 0; s < q_values_lineworld.size(); ++s) {
@@ -80,7 +80,7 @@ void LineWorldNode::launch_q_learning() {
     });
 }
 
-void LineWorldNode::launch_value_iteration() {
+void LineWorldNode::launch_value_iteration(const int cells) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
         return;
@@ -88,8 +88,8 @@ void LineWorldNode::launch_value_iteration() {
 
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
-        LineWorld<5> lineworld;
+    current_calculation = std::async(std::launch::async, [cells]() {
+        LineWorld lineworld(cells);
         auto value_function_lineworld = value_iteration(lineworld, 0.9f, 0.0001f);
 
         std::stringstream ss;

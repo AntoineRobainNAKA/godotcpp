@@ -14,19 +14,19 @@ func _ready() -> void:
 func _process(delta: float) -> void:
 	if (Input.is_action_just_pressed("ui_up")):
 		print("Policy Iteration on LineWorld")
-		launch_policy_iteration(0, 0)
+		launch_policy_iteration(5)
 		algorithm_type = GridVisualizer.AlgorithmType.POLICY_ITERATION
 		calculationComplete = false
 	
 	if (Input.is_action_just_pressed("ui_down")):
 		print("Q-Learning on LineWorld")
-		launch_q_learning()
+		launch_q_learning(5)
 		algorithm_type = GridVisualizer.AlgorithmType.Q_LEARNING
 		calculationComplete = false
 	
 	if (Input.is_action_just_pressed("ui_right")):
 		print("Value Iteration on LineWorld")
-		launch_value_iteration()
+		launch_value_iteration(5)
 		algorithm_type = GridVisualizer.AlgorithmType.VALUE_ITERATION
 		calculationComplete = false
 		

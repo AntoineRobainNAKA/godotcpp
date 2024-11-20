@@ -1,9 +1,5 @@
-//
 // Created by vidal on 10/12/2024.
-//
-
-#ifndef INC_5A_RVJV_FULL_CPP_TEMPLATE_MODELFREEENV_H
-#define INC_5A_RVJV_FULL_CPP_TEMPLATE_MODELFREEENV_H
+#pragma once
 
 
 #include <vector>
@@ -28,6 +24,3 @@ public:
     [[maybe_unused]] [[nodiscard]] virtual std::vector<std::size_t> available_actions() const = 0;
     [[maybe_unused]] virtual void step(std::size_t action) = 0;
 };
-
-
-#endif //INC_5A_RVJV_FULL_CPP_TEMPLATE_MODELFREEENV_H

@@ -30,10 +30,6 @@ GridWorldNode::~GridWorldNode() {
         current_calculation.wait(); // Clean up any pending calculation
     }
 }
-
-// ps : le résultat retourné n'est pas bon (c'est évident si on regarde)
-// C'est un problème dans le gridworld directement
-// pas encore trouvé la solution ¯\_(ツ)_/¯
 void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progres !");
@@ -41,10 +37,8 @@ void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() { // []() is lambda declaration 
-        // Pas trouvé le moyen de passer la taille en paramètre
-        // C'est une connerie avec le template qui exige des const
-        GridWorld<5, 5> gridworld;
+    current_calculation = std::async(std::launch::async, [rows, columns]() { // []() is lambda declaration
+        GridWorld gridworld(rows, columns);
         auto [pi_gridworld, value_function_gridworld] = policy_iteration(gridworld, 0.9f, 0.0001f);
 
         std::stringstream ss;
@@ -61,16 +55,16 @@ void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
     });
 }
 
-void GridWorldNode::launch_q_learning() {
+void GridWorldNode::launch_q_learning(const int rows, const int columns) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress !");
         return;
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
-        GridWorld<5,5> gridworld;
-        auto q_values_gridworld = q_learning<GridWorld<5, 5>>(10000, 0.1f, 0.9f, 1.0f);
+    current_calculation = std::async(std::launch::async, [rows, columns]() {
+        GridWorld gridworld(rows, columns);
+        auto q_values_gridworld = q_learning(gridworld, 10000, 0.1f, 0.9f, 1.0f);
         std::stringstream ss;
 
         for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
@@ -84,7 +78,7 @@ void GridWorldNode::launch_q_learning() {
     });
 }
 
-void GridWorldNode::launch_value_iteration() {
+void GridWorldNode::launch_value_iteration(const int rows, const int columns) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
         return;
@@ -92,8 +86,8 @@ void GridWorldNode::launch_value_iteration() {
 
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, []() {
-        GridWorld<5, 5> gridworld;
+    current_calculation = std::async(std::launch::async, [rows, columns]() {
+        GridWorld gridworld(rows, columns);
         auto value_function_gridworld = value_iteration(gridworld, 0.9f, 0.0001f);
 
         std::stringstream ss;

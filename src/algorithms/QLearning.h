@@ -1,9 +1,5 @@
-//
 // Created by vidal on 10/12/2024.
-//
-
-#ifndef INC_5A_RVJV_FULL_CPP_TEMPLATE_QLEARNING_H
-#define INC_5A_RVJV_FULL_CPP_TEMPLATE_QLEARNING_H
+#pragma once
 
 #include <vector>
 #include <cstddef>
@@ -11,14 +7,13 @@
 #include <algorithm>
 #include <limits>
 
-template<typename TEnv>
-std::vector<std::vector<float>> q_learning(
+inline std::vector<std::vector<float>> q_learning(
+        ModelFreeEnv& env,
         std::size_t num_episodes,
         float learning_rate,
         float gamma,
         float epsilon
 ) {
-    TEnv env;
     std::size_t num_states = env.num_states();
     std::size_t num_actions = env.num_actions();
 
@@ -79,5 +74,3 @@ std::vector<std::vector<float>> q_learning(
 
     return q_values;
 }
-
-#endif //INC_5A_RVJV_FULL_CPP_TEMPLATE_QLEARNING_H

@@ -1,9 +1,5 @@
-//
 // Created by vidal on 10/12/2024.
-//
-
-#ifndef INC_5A_RVJV_FULL_CPP_TEMPLATE_LINEWORLD_H
-#define INC_5A_RVJV_FULL_CPP_TEMPLATE_LINEWORLD_H
+#pragma once
 
 #include <cstddef>
 #include <vector>
@@ -15,29 +11,29 @@
 #include "../contracts/MDPEnv.h"
 #include "../contracts/ModelFreeEnv.h"
 
-template <std::size_t NB_CELLS>
-class [[maybe_unused]] LineWorld : public MDPEnv, public ModelFreeEnv {
+
+class LineWorld : public MDPEnv, public ModelFreeEnv {
 private:
+    std::size_t nb_cells;
     std::size_t current_cell;
 
 public:
-    LineWorld() : current_cell(NB_CELLS / 2) {}
+    LineWorld(std::size_t cells) : nb_cells(cells), current_cell(nb_cells / 2) {}
+    LineWorld(std::size_t cells, std::size_t initial_cell) : nb_cells(cells), current_cell(initial_cell) {}
 
-    explicit LineWorld(std::size_t initial_cell) : current_cell(initial_cell) {}
+    // [[maybe_unused]] static std::unique_ptr<LineWorld> create() {
+    //     return std::make_unique<LineWorld>();
+    // }
 
-    [[maybe_unused]] static std::unique_ptr<LineWorld> create() {
-        return std::make_unique<LineWorld>();
-    }
-
-    template <typename RNG>
-    [[maybe_unused]] static std::unique_ptr<LineWorld> from_random_state(RNG& rng) {
-        std::uniform_int_distribution<std::size_t> dist(0, NB_CELLS - 1);
-        return std::make_unique<LineWorld>(dist(rng));
-    }
+    // template <typename RNG>
+    // [[maybe_unused]] static std::unique_ptr<LineWorld> from_random_state(RNG& rng) {
+    //     std::uniform_int_distribution<std::size_t> dist(0, nb_cells - 1);
+    //     return std::make_unique<LineWorld>(dist(rng));
+    // }
 
     // Implémentation des méthodes de MDPEnv
     [[nodiscard]] std::size_t num_states() const override {
-        return NB_CELLS;
+        return nb_cells;
     }
 
     [[nodiscard]] std::size_t num_actions() const override {
@@ -59,15 +55,15 @@ public:
 
     [[nodiscard]] float transition_probability(std::size_t state, std::size_t action,
                                  std::size_t next_state, std::size_t reward_index) const override {
-        if (state == 0 || state == NB_CELLS - 1) {
+        if (state == 0 || state == nb_cells - 1) {
             return 0.0f;
         }
 
-        if (action == 1 && reward_index == 1 && (state >= 1 && state <= NB_CELLS - 3) && next_state == state + 1) {
+        if (action == 1 && reward_index == 1 && (state >= 1 && state <= nb_cells - 3) && next_state == state + 1) {
             return 1.0f;
         }
 
-        if (action == 0 && reward_index == 1 && (state >= 2 && state <= NB_CELLS - 2) && next_state == state - 1) {
+        if (action == 0 && reward_index == 1 && (state >= 2 && state <= nb_cells - 2) && next_state == state - 1) {
             return 1.0f;
         }
 
@@ -75,7 +71,7 @@ public:
             return 1.0f;
         }
 
-        if (state == NB_CELLS - 2 && action == 1 && next_state == NB_CELLS - 1 && reward_index == 2) {
+        if (state == nb_cells - 2 && action == 1 && next_state == nb_cells - 1 && reward_index == 2) {
             return 1.0f;
         }
 
@@ -84,17 +80,17 @@ public:
 
     // Implémentation des méthodes de ModelFreeEnv
     void reset() override {
-        current_cell = NB_CELLS / 2;
+        current_cell = nb_cells / 2;
     }
 
     [[nodiscard]] bool is_game_over() const override {
-        return current_cell == 0 || current_cell == NB_CELLS - 1;
+        return current_cell == 0 || current_cell == nb_cells - 1;
     }
 
     [[nodiscard]] float score() const override {
         if (current_cell == 0) {
             return -1.0f;
-        } else if (current_cell == NB_CELLS - 1) {
+        } else if (current_cell == nb_cells - 1) {
             return 1.0f;
         } else {
             return 0.0f;
@@ -132,6 +128,3 @@ public:
         }
     }
 };
-
-
-#endif //INC_5A_RVJV_FULL_CPP_TEMPLATE_LINEWORLD_H

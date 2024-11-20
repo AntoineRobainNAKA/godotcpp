@@ -27,8 +27,8 @@ namespace godot {
         ~GridWorldNode();
 
         void launch_policy_iteration(const int rows, const int columns);
-        void launch_q_learning();
-        void launch_value_iteration();
+        void launch_q_learning(const int rows, const int columns);
+        void launch_value_iteration(const int rows, const int columns);
         bool is_calculation_complete() const;
         String get_result();
 
