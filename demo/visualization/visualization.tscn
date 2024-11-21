@@ -1,6 +1,7 @@
-[gd_scene load_steps=2 format=3 uid="uid://cv7ih3hhf1qbi"]
+[gd_scene load_steps=3 format=3 uid="uid://cv7ih3hhf1qbi"]
 
 [ext_resource type="Script" path="res://visualization/visualization.gd" id="1_7ejpy"]
+[ext_resource type="PackedScene" uid="uid://bdieyo4p65pxs" path="res://visualization/grid_visualizer.tscn" id="2_m54qk"]
 
 [node name="Visualization" type="Control"]
 layout_mode = 3
@@ -25,6 +26,17 @@ grow_vertical = 2
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="GridVisualizer" parent="HBoxContainer/Visuals" instance=ExtResource("2_m54qk")]
+unique_name_in_owner = true
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+offset_right = 0.0
+offset_bottom = 0.0
+grow_horizontal = 2
+grow_vertical = 2
+
 [node name="Controls" type="Control" parent="HBoxContainer"]
 layout_mode = 2
 size_flags_horizontal = 3
@@ -32,14 +44,13 @@ size_flags_stretch_ratio = 0.25
 
 [node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer/Controls"]
 layout_mode = 1
-anchors_preset = 14
-anchor_top = 0.5
-anchor_right = 1.0
-anchor_bottom = 0.5
-offset_top = -66.5
-offset_bottom = 66.5
+anchors_preset = 5
+anchor_left = 0.5
+anchor_right = 0.5
+offset_left = -50.0
+offset_right = 50.0
+offset_bottom = 133.0
 grow_horizontal = 2
-grow_vertical = 2
 
 [node name="Environment" type="Label" parent="HBoxContainer/Controls/VBoxContainer"]
 layout_mode = 2
@@ -48,6 +59,25 @@ text = "Environment"
 [node name="EnvironmentDropdown" type="OptionButton" parent="HBoxContainer/Controls/VBoxContainer"]
 unique_name_in_owner = true
 layout_mode = 2
+
+[node name="EnvironmentParams" type="VBoxContainer" parent="HBoxContainer/Controls/VBoxContainer"]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="Param1" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "zqaffzf"
+
+[node name="Input1" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+rounded = true
+
+[node name="Param2" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+
+[node name="Input2" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+rounded = true
 
 [node name="Algorithm" type="Label" parent="HBoxContainer/Controls/VBoxContainer"]
 layout_mode = 2
@@ -60,3 +90,5 @@ layout_mode = 2
 [node name="StartButton" type="Button" parent="HBoxContainer/Controls/VBoxContainer"]
 layout_mode = 2
 text = "Start"
+
+[connection signal="pressed" from="HBoxContainer/Controls/VBoxContainer/StartButton" to="." method="_on_start_button_pressed"]
