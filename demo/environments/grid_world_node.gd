@@ -4,7 +4,7 @@ extends GridWorldNode
 
 var calculationTime: float = 0.0
 var calculationComplete: bool = true
-var algorithm_type: GridVisualizer.AlgorithmType = GridVisualizer.AlgorithmType.NONE
+var algorithm_type: Globals.AlgorithmType = Globals.AlgorithmType.NONE
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -15,19 +15,19 @@ func _process(delta: float) -> void:
 	if (Input.is_action_just_pressed("ui_accept")):
 		print("Policy Iteration on GridWorld")
 		launch_policy_iteration(10, 10)
-		algorithm_type = GridVisualizer.AlgorithmType.POLICY_ITERATION
+		algorithm_type = Globals.AlgorithmType.POLICY_ITERATION
 		calculationComplete = false
 	
 	if (Input.is_action_just_pressed("ui_cancel")):
 		print("Q-Learning on GridWorld")
 		launch_q_learning(5, 5)
-		algorithm_type = GridVisualizer.AlgorithmType.Q_LEARNING
+		algorithm_type = Globals.AlgorithmType.Q_LEARNING
 		calculationComplete = false
 		
 	if (Input.is_key_label_pressed(KEY_A)):
 		print("Value Iteration on GridWorld")
 		launch_value_iteration(5, 5)
-		algorithm_type = GridVisualizer.AlgorithmType.VALUE_ITERATION
+		algorithm_type = Globals.AlgorithmType.VALUE_ITERATION
 		calculationComplete = false
 		
 		
@@ -38,7 +38,7 @@ func _process(delta: float) -> void:
 		print("Took " + str(calculationTime) + " seconds")
 		calculationTime = 0.0
 		grid_vis.update_visualization(algorithm_type, result, Vector2i(10, 10))
-		algorithm_type = GridVisualizer.AlgorithmType.NONE
+		algorithm_type = Globals.AlgorithmType.NONE
 				
 	if !calculationComplete:
 		calculationTime += delta
