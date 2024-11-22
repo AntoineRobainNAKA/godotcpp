@@ -1,0 +1,10 @@
+[gd_scene load_steps=2 format=3 uid="uid://c4pkclarjeew"]
+
+[ext_resource type="Script" path="res://environments/environments_container.gd" id="1_slqt3"]
+
+[node name="EnvironmentsContainer" type="Node"]
+script = ExtResource("1_slqt3")
+
+[node name="LineWorldNode" type="LineWorldNode" parent="."]
+
+[node name="GridWorldNode" type="GridWorldNode" parent="."]

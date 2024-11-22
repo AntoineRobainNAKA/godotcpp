@@ -1,5 +1,4 @@
-#ifndef GRIDWORLD
-#define GRIDWORLD
+#pragma once
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/thread.hpp>
@@ -9,6 +8,7 @@
 
 
 namespace godot {
+    
     class GridWorldNode : public Node {
         GDCLASS(GridWorldNode, Node);
 
@@ -26,14 +26,10 @@ namespace godot {
         GridWorldNode();
         ~GridWorldNode();
 
-        void launch_policy_iteration(const int rows, const int columns);
-        void launch_q_learning(const int rows, const int columns);
-        void launch_value_iteration(const int rows, const int columns);
+        void launch_algorithm(int algorithm_type, const int rows, const int colums);
         bool is_calculation_complete() const;
         String get_result();
 
         void _process(double delta) override;
     };
 }
-
-#endif

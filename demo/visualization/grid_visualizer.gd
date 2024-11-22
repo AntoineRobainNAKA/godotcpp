@@ -8,16 +8,9 @@ extends MarginContainer
 @export var q_learning_cell: PackedScene
 @export var value_iteration_cell: PackedScene
 
-enum AlgorithmType {
-	NONE,
-	POLICY_ITERATION,
-	VALUE_ITERATION,
-	Q_LEARNING
-}
-
 var grid_container: GridContainer
 var environment_size: Vector2i = Vector2i(5, 5)  # Default 5x5, can be changed
-var current_algorithm: AlgorithmType
+var current_algorithm: Globals.AlgorithmType
 
 func _ready() -> void:    
 	setup_grid()
@@ -28,7 +21,7 @@ func setup_grid() -> void:
 		add_child(grid_container)
 	grid_container.columns = environment_size.x
 
-func generate_grid(algorithm: AlgorithmType, grid_size: Vector2i) -> void:
+func generate_grid(algorithm: Globals.AlgorithmType, grid_size: Vector2i) -> void:
 	current_algorithm = algorithm
 
 	var cell_scene = get_cell_scene_for_algorithm(algorithm)
@@ -53,29 +46,34 @@ func generate_grid(algorithm: AlgorithmType, grid_size: Vector2i) -> void:
 			cell.cell_clicked.connect(_on_cell_clicked)
 			grid_container.add_child(cell)
 
-func get_cell_scene_for_algorithm(algorithm: AlgorithmType) -> PackedScene:
+func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedScene:
 	match algorithm:
-		AlgorithmType.POLICY_ITERATION:
+		Globals.AlgorithmType.POLICY_ITERATION:
 			return policy_iteration_cell
-		AlgorithmType.VALUE_ITERATION:
+		Globals.AlgorithmType.VALUE_ITERATION:
 			return value_iteration_cell
-		AlgorithmType.Q_LEARNING:
+		Globals.AlgorithmType.Q_LEARNING:
 			return q_learning_cell
 		_:
 			return null
 			
-func update_visualization(algorithm: AlgorithmType, result: String, grid_size: Vector2i) -> void:
+func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid_size: Vector2i) -> void:
+	print("Updationg visualization")
+	
 	# If grid isn't generated or algorithm changed, generate new grid
-	if grid_container.get_child_count() == 0 or current_algorithm != algorithm:
+	if grid_container.get_child_count() == 0 or current_algorithm != algorithm or grid_size != environment_size:
+		print("Generating new grid")
 		generate_grid(algorithm, grid_size)
 	
 	match algorithm:
-		AlgorithmType.POLICY_ITERATION:
+		Globals.AlgorithmType.POLICY_ITERATION:
 			parse_policy_iteration_results(result)
-		AlgorithmType.VALUE_ITERATION:
+		Globals.AlgorithmType.VALUE_ITERATION:
 			parse_value_iteration_results(result)
-		AlgorithmType.Q_LEARNING:
+		Globals.AlgorithmType.Q_LEARNING:
 			parse_q_learning_results(result)
+		_:
+			print("Didn't match any algorithm !")
 
 func parse_policy_iteration_results(result_text: String) -> void:
 	var values = []

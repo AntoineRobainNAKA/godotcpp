@@ -2,16 +2,16 @@
 #include "algorithms/PolicyIteration.h"
 #include "algorithms/QLearning.h"
 #include "algorithms/ValueIteration.h"
+
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+
 #include <sstream>
 
 using namespace godot;
 
 void GridWorldNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_policy_iteration"), &GridWorldNode::launch_policy_iteration);
-    ClassDB::bind_method(D_METHOD("launch_q_learning"), &GridWorldNode::launch_q_learning);
-    ClassDB::bind_method(D_METHOD("launch_value_iteration"), &GridWorldNode::launch_value_iteration);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "rows", "columns"), &GridWorldNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &GridWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &GridWorldNode::get_result);
 }
@@ -30,69 +30,68 @@ GridWorldNode::~GridWorldNode() {
         current_calculation.wait(); // Clean up any pending calculation
     }
 }
-void GridWorldNode::launch_policy_iteration(const int rows, const int columns) {
-    if (calculation_pending) {
-        UtilityFunctions::print("Calculation already in progres !");
-        return;
-    }    
-    calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, [rows, columns]() { // []() is lambda declaration
-        GridWorld gridworld(rows, columns);
-        auto [pi_gridworld, value_function_gridworld] = policy_iteration(gridworld, 0.9f, 0.0001f);
-
-        std::stringstream ss;
-
-        for (std::size_t s = 0; s < pi_gridworld.size(); ++s) {
-            ss << "Pi(s=" << s << ") = " << pi_gridworld[s] << std::endl;
-        }
-        for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
-            ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
-        }
-
-        // Godot veut la String (godot::String) et pas std::string
-        return String(ss.str().c_str());
-    });
-}
-
-void GridWorldNode::launch_q_learning(const int rows, const int columns) {
-    if (calculation_pending) {
-        UtilityFunctions::print("Calculation already in progress !");
-        return;
-    }    
-    calculation_pending = true;
-
-    current_calculation = std::async(std::launch::async, [rows, columns]() {
-        GridWorld gridworld(rows, columns);
-        auto q_values_gridworld = q_learning(gridworld, 10000, 0.1f, 0.9f, 1.0f);
-        std::stringstream ss;
-
-        for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
-            const auto &q_s = q_values_gridworld[s];
-            for (std::size_t a = 0; a < q_s.size(); ++a) {
-                ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
-            }
-        }
-
-        return String(ss.str().c_str());
-    });
-}
-
-void GridWorldNode::launch_value_iteration(const int rows, const int columns) {
+void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const int columns) {
+    // Check if a calculation is already in progress
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
         return;
-    }
-
+    }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, [rows, columns]() {
+    // Use a lambda to capture the configuration and choose the algorithm
+    current_calculation = std::async(std::launch::async, [this, algorithm_type, rows, columns]() {
         GridWorld gridworld(rows, columns);
-        auto value_function_gridworld = value_iteration(gridworld, 0.9f, 0.0001f);
-
         std::stringstream ss;
-        for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
-            ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
+
+        switch (algorithm_type) {
+            case 1: {
+                auto [pi_gridworld, value_function_gridworld] = policy_iteration(
+                    gridworld, 
+                    0.9f, 
+                    0.0001f
+                );
+
+                for (std::size_t s = 0; s < pi_gridworld.size(); ++s) {
+                    ss << "Pi(s=" << s << ") = " << pi_gridworld[s] << std::endl;
+                }
+                for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
+                    ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
+                }
+                break;
+            }
+            case 2: {
+                auto q_values_gridworld = q_learning(
+                    gridworld, 
+                    10000, 
+                    0.1f, 
+                    0.9f, 
+                    1.0f
+                );
+
+                for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
+                    const auto &q_s = q_values_gridworld[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
+                }
+                break;
+            }
+            case 3: {
+                auto value_function_gridworld = value_iteration(
+                    gridworld, 
+                    0.9f, 
+                    0.0001f
+                );
+
+                for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
+                    ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
+                }
+                break;
+            }
+            default:
+                ss << "No algorithm selected";
+                break;
         }
 
         return String(ss.str().c_str());

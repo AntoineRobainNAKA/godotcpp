@@ -1,5 +1,4 @@
-#ifndef LINEWORLD
-#define LINEWORLD
+#pragma once
 
 #include <godot_cpp/classes/node.hpp>
 #include <godot_cpp/classes/thread.hpp>
@@ -12,8 +11,7 @@ namespace godot {
         GDCLASS(LineWorldNode, Node);
 
     private:
-        int rows;
-        int columns;
+        int cells;
         std::future<String> current_calculation;
         bool calculation_pending;
         String cached_result;
@@ -25,6 +23,7 @@ namespace godot {
         LineWorldNode();
         ~LineWorldNode();
 
+        void launch_algorithm(int algorithm_type, const int cells);
         void launch_policy_iteration(const int cells);
         void launch_q_learning(const int cells);
         void launch_value_iteration(const int cells);
@@ -34,5 +33,3 @@ namespace godot {
         void _process(double delta) override;
     };
 }
-
-#endif
