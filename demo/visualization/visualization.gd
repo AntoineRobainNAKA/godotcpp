@@ -6,7 +6,7 @@ extends Control
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
-	for environment in Globals.Environments:
+	for environment in Globals.EnvironmentType:
 		environment_dropdown.add_item(environment)
 		
 	for algorithm in Globals.AlgorithmType:

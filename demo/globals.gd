@@ -7,7 +7,7 @@ enum AlgorithmType {
 	Q_LEARNING,
 }
 
-enum Environments {
+enum EnvironmentType {
 	NONE,
 	LINEWORLD,
 	GRIDWORLD,
