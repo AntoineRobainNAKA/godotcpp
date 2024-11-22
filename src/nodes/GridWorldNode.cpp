@@ -11,7 +11,7 @@
 using namespace godot;
 
 void GridWorldNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_algorithm"), &GridWorldNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "rows", "columns"), &GridWorldNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &GridWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &GridWorldNode::get_result);
 }

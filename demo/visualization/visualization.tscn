@@ -66,17 +66,24 @@ size_flags_vertical = 3
 
 [node name="Param1" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
 layout_mode = 2
-text = "zqaffzf"
+text = "Size x"
 
 [node name="Input1" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
 layout_mode = 2
+min_value = 1.0
+value = 1.0
 rounded = true
 
 [node name="Param2" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
 layout_mode = 2
+text = "Size y"
 
 [node name="Input2" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
 layout_mode = 2
+min_value = 1.0
+value = 1.0
 rounded = true
 
 [node name="Algorithm" type="Label" parent="HBoxContainer/Controls/VBoxContainer"]

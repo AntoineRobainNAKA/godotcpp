@@ -58,8 +58,11 @@ func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedSce
 			return null
 			
 func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid_size: Vector2i) -> void:
+	print("Updationg visualization")
+	
 	# If grid isn't generated or algorithm changed, generate new grid
-	if grid_container.get_child_count() == 0 or current_algorithm != algorithm:
+	if grid_container.get_child_count() == 0 or current_algorithm != algorithm or grid_size != environment_size:
+		print("Generating new grid")
 		generate_grid(algorithm, grid_size)
 	
 	match algorithm:
@@ -69,6 +72,8 @@ func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid
 			parse_value_iteration_results(result)
 		Globals.AlgorithmType.Q_LEARNING:
 			parse_q_learning_results(result)
+		_:
+			print("Didn't match any algorithm !")
 
 func parse_policy_iteration_results(result_text: String) -> void:
 	var values = []

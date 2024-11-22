@@ -5,6 +5,8 @@
 
 [node name="Main" type="Node"]
 
-[node name="EnvironmentsContainer" parent="." instance=ExtResource("2_q8f6k")]
+[node name="EnvironmentsContainer" parent="." node_paths=PackedStringArray("visualization") instance=ExtResource("2_q8f6k")]
+visualization = NodePath("../Visualization")
 
-[node name="Visualization" parent="." instance=ExtResource("3_bkxlq")]
+[node name="Visualization" parent="." node_paths=PackedStringArray("environment_container") instance=ExtResource("3_bkxlq")]
+environment_container = NodePath("../EnvironmentsContainer")

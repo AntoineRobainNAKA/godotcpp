@@ -9,7 +9,7 @@
 using namespace godot;
 
 void LineWorldNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_algorithm"), &LineWorldNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "cells"), &LineWorldNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &LineWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &LineWorldNode::get_result);
 }
