@@ -9,6 +9,7 @@ enum AlgorithmType {
 	POLICY_ITERATION,
 	VALUE_ITERATION,
 	Q_LEARNING,
+	MONTE_CARLO_ES,
 }
 
 enum EnvironmentType {

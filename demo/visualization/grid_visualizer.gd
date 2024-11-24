@@ -72,6 +72,8 @@ func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid
 			parse_value_iteration_results(result)
 		Globals.AlgorithmType.Q_LEARNING:
 			parse_q_learning_results(result)
+		Globals.AlgorithmType.MONTE_CARLO_ES:
+			parse_q_learning_results(result)
 		_:
 			print("Didn't match any algorithm !")
 
