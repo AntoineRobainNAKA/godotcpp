@@ -4,7 +4,7 @@
 #include "algorithms/PolicyIteration.h"
 #include "algorithms/QLearning.h"
 #include "algorithms/ValueIteration.h"
-
+#include "algorithms/MonteCarloES.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
 
@@ -100,6 +100,17 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                     }
                     ss << "State " << s << " (" << state_desc << "):\n";
                     ss << "  Value: " << value_function_rps[s] << "\n\n";
+                }
+                break;
+            }
+            case 4: {
+                auto q_values_rps = monte_carlo_es(rps, 10000, 0.1f);
+
+                for (std::size_t s = 0; s < q_values_rps.size(); ++s) {
+                    const auto& q_s = q_values_rps[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
                 }
                 break;
             }

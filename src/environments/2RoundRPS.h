@@ -2,6 +2,7 @@
 #include <vector>
 #include <memory>
 #include <random>
+#include <stdexcept>
 #include "../contracts/MDPEnv.h"
 #include "../contracts/ModelFreeEnv.h"
 

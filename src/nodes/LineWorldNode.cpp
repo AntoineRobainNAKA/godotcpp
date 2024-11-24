@@ -4,6 +4,7 @@
 #include "algorithms/ValueIteration.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
+#include "../algorithms/MonteCarloES.h"
 #include <sstream>
 
 using namespace godot;
@@ -82,6 +83,21 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
 
                 for (std::size_t s = 0; s < value_function_lineworld.size(); ++s) {
                     ss << "V(s=" << s << ") = " << value_function_lineworld[s] << std::endl;
+                }
+                break;
+            }
+            case 4: {
+                auto q_values_gridworld = monte_carlo_es(
+                    lineworld,
+                    10000,    // Number of episodes
+                    0.1f      // Epsilon
+                );
+
+                for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
+                    const auto& q_s = q_values_gridworld[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
                 }
                 break;
             }

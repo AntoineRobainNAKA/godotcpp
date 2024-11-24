@@ -93,7 +93,7 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                 auto q_values_gridworld = monte_carlo_es(
                     gridworld,
                     10000,    // Number of episodes
-                    0.1f      // Epsilon
+                    0.01f      // Epsilon
                 );
 
                 for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
