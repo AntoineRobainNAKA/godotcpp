@@ -4,6 +4,7 @@
 #include "nodes/GridWorldNode.h"
 #include "nodes/LineWorldNode.h"
 #include "nodes/2RoundRPSNode.h"
+#include "nodes/SecretEnv0Node.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -20,6 +21,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     GDREGISTER_CLASS(GridWorldNode);
     GDREGISTER_CLASS(LineWorldNode);
     GDREGISTER_CLASS(RPSNode);
+    GDREGISTER_CLASS(SecretEnv0Node);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

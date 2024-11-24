@@ -15,5 +15,6 @@ enum EnvironmentType {
 	NONE,
 	LINEWORLD,
 	GRIDWORLD,
-	RPS
+	RPS,
+	SECRETENV0
 }

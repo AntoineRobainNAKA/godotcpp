@@ -10,3 +10,5 @@ script = ExtResource("1_slqt3")
 [node name="GridWorldNode" type="GridWorldNode" parent="."]
 
 [node name="RPSNode" type="RPSNode" parent="."]
+
+[node name="SecretEnv0Node" type="SecretEnv0Node" parent="."]
