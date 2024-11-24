@@ -2,6 +2,7 @@
 #include "algorithms/PolicyIteration.h"
 #include "algorithms/QLearning.h"
 #include "algorithms/ValueIteration.h"
+#include "../algorithms/MonteCarloES.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -32,11 +33,10 @@ GridWorldNode::~GridWorldNode() {
 }
 
 void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const int columns) {
-    // Check if a calculation is already in progress
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
         return;
-    }    
+    }
     calculation_pending = true;
 
     // Use a lambda to capture the configuration and choose the algorithm
@@ -86,6 +86,21 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
 
                 for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
                     ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
+                }
+                break;
+            }
+            case 4: {
+                auto q_values_gridworld = monte_carlo_es(
+                    gridworld,
+                    10000,    // Number of episodes
+                    0.1f      // Epsilon
+                );
+
+                for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
+                    const auto& q_s = q_values_gridworld[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
                 }
                 break;
             }
