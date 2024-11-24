@@ -18,8 +18,8 @@ func _ready() -> void:
 	for algorithm in Globals.AlgorithmType:
 		algorithm_dropdown.add_item(algorithm)
 		
-func show_result(algorithm, result: String, grid_size: Vector2i):
-	grid_visualizer.update_visualization(algorithm, result, grid_size)
+func show_result(algorithm, result: String, grid_size: Vector2i, num_actions: int):
+	grid_visualizer.update_visualization(algorithm, result, grid_size, num_actions)
 
 func _on_start_button_pressed() -> void:
 	print("launching..!")

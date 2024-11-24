@@ -57,8 +57,8 @@ func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedSce
 		_:
 			return null
 			
-func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid_size: Vector2i) -> void:
-	print("Updationg visualization")
+func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid_size: Vector2i, num_actions: int) -> void:
+	print("Updating visualization")
 	
 	# If grid isn't generated or algorithm changed, generate new grid
 	if grid_container.get_child_count() == 0 or current_algorithm != algorithm or grid_size != environment_size:
@@ -71,7 +71,7 @@ func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid
 		Globals.AlgorithmType.VALUE_ITERATION:
 			parse_value_iteration_results(result)
 		Globals.AlgorithmType.Q_LEARNING:
-			parse_q_learning_results(result)
+			parse_q_learning_results(result, num_actions)
 		_:
 			print("Didn't match any algorithm !")
 
@@ -112,9 +112,8 @@ func update_value_iteration_data(values: Array) -> void:
 		if i < values.size():
 			cells[i].update_data("value", values[i])
 
-func parse_q_learning_results(result_text: String) -> void:
+func parse_q_learning_results(result_text: String, num_actions: int) -> void:
 	var qs = []
-	var num_actions = 4
 	var cur_num_actions = 0
 	var state_q = []
 	
@@ -129,12 +128,14 @@ func parse_q_learning_results(result_text: String) -> void:
 				state_q = [] 
 				cur_num_actions = 0
 	
-	update_q_learning_data(qs)
+	update_q_learning_data(qs, num_actions)
 
-func update_q_learning_data(qs: Array) -> void:
+func update_q_learning_data(qs: Array, num_actions: int) -> void:
+	print("Updating q learning data...")
 	var cells = grid_container.get_children()
 	for i in range(cells.size()):
 		if i < qs.size():
+			cells[i].num_actions = num_actions
 			cells[i].update_data("q", qs[i])
 
 func _on_cell_clicked(cell_index: int) -> void:
