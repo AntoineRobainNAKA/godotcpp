@@ -5,6 +5,8 @@ extends Node
 
 @onready var lineworldnode: LineWorldNode = $LineWorldNode
 @onready var gridworldnode: GridWorldNode = $GridWorldNode
+@onready var rpsnode: RPSNode = $RPSNode
+@onready var secretenv0node: SecretEnv0Node = $SecretEnv0Node
 
 var calculationTime: float = 0.0
 var calculationComplete: bool = true
@@ -49,3 +51,11 @@ func launch(environment: Globals.EnvironmentType, algorithm: Globals.AlgorithmTy
 			current_node = gridworldnode
 			gridworldnode.launch_algorithm(algorithm, size_x, size_y)
 			print("launching on gridworld")
+		Globals.EnvironmentType.RPS:
+			current_node = rpsnode
+			rpsnode.launch_algorithm(algorithm)
+			print("lauching on rps")
+		Globals.EnvironmentType.SECRETENV0:
+			current_node = secretenv0node
+			secretenv0node.launch_algorithm(algorithm)
+			print("launching on secret env 0")
