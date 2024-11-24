@@ -3,6 +3,7 @@
 #include "nodes/gdexample.h"
 #include "nodes/GridWorldNode.h"
 #include "nodes/LineWorldNode.h"
+#include "nodes/2RoundRPSNode.h"
 
 #include <gdextension_interface.h>
 #include <godot_cpp/core/defs.hpp>
@@ -18,6 +19,7 @@ void initialize_example_module(ModuleInitializationLevel p_level) {
     GDREGISTER_CLASS(GDExample);
     GDREGISTER_CLASS(GridWorldNode);
     GDREGISTER_CLASS(LineWorldNode);
+    GDREGISTER_CLASS(RPSNode);
 }
 
 void uninitialize_example_module(ModuleInitializationLevel p_level) {

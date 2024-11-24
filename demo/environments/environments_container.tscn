@@ -8,3 +8,5 @@ script = ExtResource("1_slqt3")
 [node name="LineWorldNode" type="LineWorldNode" parent="."]
 
 [node name="GridWorldNode" type="GridWorldNode" parent="."]
+
+[node name="RPSNode" type="RPSNode" parent="."]

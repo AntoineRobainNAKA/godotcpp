@@ -6,6 +6,7 @@
 #include <random>
 #include <algorithm>
 #include <limits>
+#include "contracts/ModelFreeEnv.h"
 
 inline std::vector<std::vector<float>> q_learning(
         ModelFreeEnv& env,
