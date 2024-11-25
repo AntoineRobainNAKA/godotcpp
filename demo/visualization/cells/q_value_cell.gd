@@ -1,5 +1,7 @@
 extends GridCell
 
+var num_actions: int
+
 func refresh_display() -> void:
 	var container = get_child(0) as VBoxContainer
 	
@@ -7,7 +9,7 @@ func refresh_display() -> void:
 	for child in container.get_children():
 		child.queue_free()
 	
-	for i in range(0, 4, 1):
+	for i in range(0, num_actions, 1):
 		var q_label = Label.new()
 		q_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 		

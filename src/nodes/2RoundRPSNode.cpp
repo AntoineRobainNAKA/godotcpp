@@ -130,7 +130,6 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                 }
                 break;
             }
-
             default:
                 ss << "No algorithm selected";
                 break;

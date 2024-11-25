@@ -6,6 +6,7 @@ extends Node
 @onready var lineworldnode: LineWorldNode = $LineWorldNode
 @onready var gridworldnode: GridWorldNode = $GridWorldNode
 @onready var rpsnode: RPSNode = $RPSNode
+@onready var montyhallnode: MontyHallNode = $MontyHallNode
 @onready var secretenv0node: SecretEnv0Node = $SecretEnv0Node
 
 var calculationTime: float = 0.0
@@ -14,6 +15,7 @@ var calculationComplete: bool = true
 var current_node
 var algorithm_type: Globals.AlgorithmType
 var grid_size: Vector2i
+var num_actions: int
 
 # Called every frame. 'delta' is the elapsed time since the previous frame.
 func _process(delta: float) -> void:
@@ -26,7 +28,7 @@ func _process(delta: float) -> void:
 		calculationComplete = true		
 		print("Took " + str(calculationTime) + " seconds")
 		calculationTime = 0.0
-		visualization.show_result(algorithm_type, result, grid_size)
+		visualization.show_result(algorithm_type, result, grid_size, num_actions)
 		algorithm_type = Globals.AlgorithmType.NONE
 		grid_size = Vector2i(0, 0)
 		current_node = null
@@ -45,16 +47,24 @@ func launch(environment: Globals.EnvironmentType, algorithm: Globals.AlgorithmTy
 			return
 		Globals.EnvironmentType.LINEWORLD:
 			current_node = lineworldnode
+			num_actions = 2
 			lineworldnode.launch_algorithm(algorithm, size_x)
 			print("launching on lineworld")
 		Globals.EnvironmentType.GRIDWORLD:
 			current_node = gridworldnode
+			num_actions = 4
 			gridworldnode.launch_algorithm(algorithm, size_x, size_y)
 			print("launching on gridworld")
 		Globals.EnvironmentType.RPS:
 			current_node = rpsnode
+			num_actions = 3
 			rpsnode.launch_algorithm(algorithm)
 			print("lauching on rps")
+		Globals.EnvironmentType.MONTYHALL:
+			current_node = montyhallnode
+			num_actions = 2
+			montyhallnode.launch_algorithm(algorithm)
+			print("launching on monty hall")
 		Globals.EnvironmentType.SECRETENV0:
 			current_node = secretenv0node
 			secretenv0node.launch_algorithm(algorithm)
