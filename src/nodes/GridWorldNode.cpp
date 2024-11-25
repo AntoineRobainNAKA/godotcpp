@@ -4,7 +4,7 @@
 #include "algorithms/ValueIteration.h"
 #include "../algorithms/MonteCarloES.h"
 #include "../algorithms/OnPolicyFirstVisitMonteCarlo.h"
-#include "algorithms/DinaQ.h"
+#include "algorithms/DynaQ.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -107,6 +107,17 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                     }
                 }
                 break;
+            }
+            case 6: {
+                auto q_values_gridworld = dina_q(gridworld, num_episodes, learning_rate, gamma, epsilon, 100, 32, 10);
+
+                for (std::size_t state = 0; state < q_values_gridworld.size(); ++state) {
+                    ss << "État " << state << ": ";
+                    for (float q_value : q_values_gridworld[state]) {
+                        ss << q_value << " ";
+                    }
+                ss << std::endl;
+                }
             }
             default:
                 ss << "No algorithm selected";

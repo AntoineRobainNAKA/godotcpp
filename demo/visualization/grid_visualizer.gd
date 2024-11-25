@@ -58,6 +58,8 @@ func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedSce
 			return q_learning_cell
 		Globals.AlgorithmType.ON_POLICY_FIRST_VISIT_MC:
 			return q_learning_cell
+		Globals.AlgorithmType.DYNA_Q:
+			return q_learning_cell
 		_:
 			return null
 			

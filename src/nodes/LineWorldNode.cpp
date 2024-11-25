@@ -7,6 +7,8 @@
 #include "../algorithms/MonteCarloES.h"
 #include <sstream>
 #include "../algorithms/OnPolicyFirstVisitMonteCarlo.h"
+#include "algorithms/DynaQ.h"
+
 using namespace godot;
 
 void LineWorldNode::_bind_methods() {
@@ -77,10 +79,10 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells, float 
                 break;
             }
             case 4: {
-                auto q_values_gridworld = monte_carlo_es(lineworld, num_episodes, epsilon);
+                auto q_values_lineworld = monte_carlo_es(lineworld, num_episodes, epsilon);
 
-                for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
-                    const auto& q_s = q_values_gridworld[s];
+                for (std::size_t s = 0; s < q_values_lineworld.size(); ++s) {
+                    const auto& q_s = q_values_lineworld[s];
                     for (std::size_t a = 0; a < q_s.size(); ++a) {
                         ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
                     }
@@ -101,6 +103,17 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells, float 
                     }
                 }
                 break;
+            }
+            case 6: {
+                auto q_values_lineworld = dina_q(lineworld, num_episodes, learning_rate, gamma, epsilon, 100, 32, 10);
+
+                for (std::size_t state = 0; state < q_values_lineworld.size(); ++state) {
+                    ss << "État " << state << ": ";
+                    for (float q_value : q_values_lineworld[state]) {
+                        ss << q_value << " ";
+                    }
+                ss << std::endl;
+                }
             }
             default:
                 ss << "No algorithm selected";
