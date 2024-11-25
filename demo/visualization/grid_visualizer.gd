@@ -143,8 +143,9 @@ func update_q_learning_data(qs: Array, num_actions: int) -> void:
 	var cells = grid_container.get_children()
 	for i in range(cells.size()):
 		if i < qs.size():
-			cells[i].num_actions = num_actions
-			cells[i].update_data("q", qs[i])
+			var cell: GridCell = cells[i]
+			cell.num_actions = num_actions
+			cell.update_data("q", qs[i])
 
 func _on_cell_clicked(cell_index: int) -> void:
 	print("Cell clicked: ", cell_index)
