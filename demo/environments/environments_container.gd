@@ -27,6 +27,7 @@ func _process(delta: float) -> void:
 		print(result)
 		calculationComplete = true		
 		print("Took " + str(calculationTime) + " seconds")
+		visualization.update_time("Took " + str(calculationTime) + " seconds")
 		calculationTime = 0.0
 		visualization.show_result(algorithm_type, result, grid_size, num_actions)
 		algorithm_type = Globals.AlgorithmType.NONE

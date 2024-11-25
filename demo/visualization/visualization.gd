@@ -13,7 +13,7 @@ extends Control
 @onready var num_episodes: SpinBox = %num_episodes
 @onready var learning_rate: SpinBox = %learning_rate
 @onready var epsilon: SpinBox = %epsilon
-
+@onready var timeLabel: Label = %Time 
 
 # Called when the node enters the scene tree for the first time.
 func _ready() -> void:
@@ -25,6 +25,9 @@ func _ready() -> void:
 		
 func show_result(algorithm, result: String, grid_size: Vector2i, num_actions: int):
 	grid_visualizer.update_visualization(algorithm, result, grid_size, num_actions)
+
+func update_time(time: String) -> void:
+	timeLabel.text = time
 
 func _on_start_button_pressed() -> void:
 	print("launching..!")

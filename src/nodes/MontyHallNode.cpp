@@ -83,7 +83,7 @@ void MontyHallNode::launch_algorithm(int algorithm_type, int doors, float gamma,
 
     current_calculation = std::async(std::launch::async, [this, algorithm_type, doors, gamma, theta, num_episodes, learning_rate, epsilon]()
                                      {
-        MontyHallEnv mh;
+        MontyHallEnv mh(doors);
         std::stringstream ss;
 
         switch (algorithm_type) {

@@ -4,6 +4,7 @@
 #include "algorithms/ValueIteration.h"
 #include "../algorithms/MonteCarloES.h"
 #include "../algorithms/OnPolicyFirstVisitMonteCarlo.h"
+#include "algorithms/DinaQ.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
