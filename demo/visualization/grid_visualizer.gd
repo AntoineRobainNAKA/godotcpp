@@ -54,6 +54,8 @@ func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedSce
 			return value_iteration_cell
 		Globals.AlgorithmType.Q_LEARNING:
 			return q_learning_cell
+		Globals.AlgorithmType.MONTE_CARLO_ES:
+			return q_learning_cell
 		_:
 			return null
 			

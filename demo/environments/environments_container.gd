@@ -6,6 +6,7 @@ extends Node
 @onready var lineworldnode: LineWorldNode = $LineWorldNode
 @onready var gridworldnode: GridWorldNode = $GridWorldNode
 @onready var rpsnode: RPSNode = $RPSNode
+@onready var montyhallnode: MontyHallNode = $MontyHallNode
 @onready var secretenv0node: SecretEnv0Node = $SecretEnv0Node
 
 var calculationTime: float = 0.0
@@ -59,6 +60,11 @@ func launch(environment: Globals.EnvironmentType, algorithm: Globals.AlgorithmTy
 			num_actions = 3
 			rpsnode.launch_algorithm(algorithm)
 			print("lauching on rps")
+		Globals.EnvironmentType.MONTYHALL:
+			current_node = montyhallnode
+			num_actions = 2
+			montyhallnode.launch_algorithm(algorithm)
+			print("launching on monty hall")
 		Globals.EnvironmentType.SECRETENV0:
 			current_node = secretenv0node
 			secretenv0node.launch_algorithm(algorithm)
