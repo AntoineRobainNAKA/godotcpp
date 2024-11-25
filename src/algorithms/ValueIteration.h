@@ -16,6 +16,13 @@ std::vector<float> value_iteration(const TEnv& env, float gamma, float theta) {
         rewards[r_index] = env.reward(r_index);
     }
 
+    // Normalisation des récompenses
+    float min_reward = *std::min_element(rewards.begin(), rewards.end());
+    float max_reward = *std::max_element(rewards.begin(), rewards.end());
+    for (auto& reward : rewards) {
+        reward = (reward - min_reward) / (max_reward - min_reward);
+    }
+
     std::size_t num_floats = num_states * num_actions * num_states * num_rewards;
     std::vector<float> cached_transition_probabilities(num_floats, 42.0f);
 
