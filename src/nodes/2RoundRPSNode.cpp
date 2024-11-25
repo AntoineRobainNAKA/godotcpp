@@ -7,7 +7,7 @@
 #include "algorithms/MonteCarloES.h"
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
-
+#include "algorithms/OnPolicyFirstVisitMonteCarlo.h"
 #include <sstream>
 
 using namespace godot;
@@ -114,6 +114,23 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                 }
                 break;
             }
+            case 5: {
+                auto [q_values_rps, returns_sum_rps] = on_policy_first_visit_monte_carlo_control(
+                    rps,
+                    10000,
+                    0.9f,
+                    0.1f
+                );
+
+                for (std::size_t s = 0; s < q_values_rps.size(); ++s) {
+                    const auto& q_s = q_values_rps[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
+                }
+                break;
+            }
+
             default:
                 ss << "No algorithm selected";
                 break;
