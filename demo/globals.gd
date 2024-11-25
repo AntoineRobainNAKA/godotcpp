@@ -10,6 +10,7 @@ enum AlgorithmType {
 	Q_LEARNING,
 	VALUE_ITERATION,
 	MONTE_CARLO_ES,
+	ON_POLICY_FIRST_VISIT_MC
 }
 
 enum EnvironmentType {

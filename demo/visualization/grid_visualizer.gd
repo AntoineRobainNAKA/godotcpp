@@ -56,6 +56,8 @@ func get_cell_scene_for_algorithm(algorithm: Globals.AlgorithmType) -> PackedSce
 			return q_learning_cell
 		Globals.AlgorithmType.MONTE_CARLO_ES:
 			return q_learning_cell
+		Globals.AlgorithmType.ON_POLICY_FIRST_VISIT_MC:
+			return q_learning_cell
 		_:
 			return null
 			
@@ -73,7 +75,11 @@ func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid
 		Globals.AlgorithmType.VALUE_ITERATION:
 			parse_value_iteration_results(result)
 		Globals.AlgorithmType.Q_LEARNING:
-			parse_q_learning_results(result, num_actions)
+			parse_q_learning_results(result)
+		Globals.AlgorithmType.MONTE_CARLO_ES:
+			parse_q_learning_results(result)
+		Globals.AlgorithmType.ON_POLICY_FIRST_VISIT_MC:
+			parse_q_learning_results(result)
 		_:
 			print("Didn't match any algorithm !")
 

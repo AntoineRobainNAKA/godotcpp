@@ -3,6 +3,7 @@
 #include "algorithms/QLearning.h"
 #include "algorithms/ValueIteration.h"
 #include "../algorithms/MonteCarloES.h"
+#include "../algorithms/OnPolicyFirstVisitMonteCarlo.h"
 
 #include <godot_cpp/core/class_db.hpp>
 #include <godot_cpp/variant/utility_functions.hpp>
@@ -93,6 +94,22 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                 auto q_values_gridworld = monte_carlo_es(
                     gridworld,
                     10000,    // Number of episodes
+                    0.01f      // Epsilon
+                );
+
+                for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
+                    const auto& q_s = q_values_gridworld[s];
+                    for (std::size_t a = 0; a < q_s.size(); ++a) {
+                        ss << "Q(s=" << s << ", a=" << a << ") = " << q_s[a] << std::endl;
+                    }
+                }
+                break;
+            }
+            case 5: {
+                auto [q_values_gridworld, returns_sum_gridworld] = on_policy_first_visit_monte_carlo_control(
+                    gridworld,
+                    10000,    // Number of episodes
+                    0.9f,     // Gamma (discount factor)
                     0.1f      // Epsilon
                 );
 
