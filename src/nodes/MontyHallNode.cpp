@@ -13,7 +13,7 @@ using namespace godot;
 
 void MontyHallNode::_bind_methods()
 {
-    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type"), &MontyHallNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "doors", "gamma", "theta", "num_episodes", "learning_rate", "epsilon"), &MontyHallNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &MontyHallNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &MontyHallNode::get_result);
 }
@@ -72,7 +72,7 @@ std::string get_state_description(size_t state_id, const MontyHallEnv &env) {
 }
 
 
-void MontyHallNode::launch_algorithm(int algorithm_type)
+void MontyHallNode::launch_algorithm(int algorithm_type, int doors, float gamma, float theta, int num_episodes, float learning_rate, float epsilon)
 {
     if (calculation_pending)
     {
@@ -81,7 +81,7 @@ void MontyHallNode::launch_algorithm(int algorithm_type)
     }
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, [this, algorithm_type]()
+    current_calculation = std::async(std::launch::async, [this, algorithm_type, doors, gamma, theta, num_episodes, learning_rate, epsilon]()
                                      {
         MontyHallEnv mh;
         std::stringstream ss;
@@ -92,7 +92,7 @@ void MontyHallNode::launch_algorithm(int algorithm_type)
                 break;
             }
             case 2: {
-                auto q_values_mh = q_learning(mh, 10000, 0.1f, 0.9f, 1.0f);
+                auto q_values_mh = q_learning(mh, num_episodes, learning_rate, gamma, epsilon);
 
                 // Print Q-values for each state
                 for (std::size_t s = 0; s < q_values_mh.size(); ++s)
@@ -153,7 +153,7 @@ void MontyHallNode::launch_algorithm(int algorithm_type)
                 break;
             }
             case 4: {
-                auto q_values_mh = monte_carlo_es(mh, 10000, 0.1f);
+                auto q_values_mh = monte_carlo_es(mh, num_episodes, epsilon);
                 
                 ss << "Monte Carlo ES Results for Monty Hall:\n";
                 for (std::size_t s = 0; s < q_values_mh.size(); ++s) {

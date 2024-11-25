@@ -23,7 +23,7 @@ namespace godot {
         MontyHallNode();
         ~MontyHallNode();
 
-        void launch_algorithm(int algorithm_type);
+        void launch_algorithm(int algorithm_type, int doors, float gamma, float theta, int num_episodes, float learning_rate, float epsilon);
         bool is_calculation_complete() const;
         String get_result();
 

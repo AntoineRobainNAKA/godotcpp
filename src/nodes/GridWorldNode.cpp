@@ -13,7 +13,7 @@
 using namespace godot;
 
 void GridWorldNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "rows", "columns"), &GridWorldNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "rows", "columns", "gamma", "theta", "num_episodes", "learning_rate", "epsilon"), &GridWorldNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &GridWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &GridWorldNode::get_result);
 }
@@ -33,7 +33,7 @@ GridWorldNode::~GridWorldNode() {
     }
 }
 
-void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const int columns) {
+void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const int columns, float gamma, float theta, int num_episodes, float learning_rate, float epsilon) {
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
         return;
@@ -41,7 +41,7 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
     calculation_pending = true;
 
     // Use a lambda to capture the configuration and choose the algorithm
-    current_calculation = std::async(std::launch::async, [this, algorithm_type, rows, columns]() {
+    current_calculation = std::async(std::launch::async, [this, algorithm_type, rows, columns, gamma, theta, num_episodes, learning_rate, epsilon]() {
         GridWorld gridworld(rows, columns);
         std::stringstream ss;
 
@@ -49,8 +49,8 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
             case 1: {
                 auto [pi_gridworld, value_function_gridworld] = policy_iteration(
                     gridworld, 
-                    0.9f, 
-                    0.0001f
+                    gamma, 
+                    theta
                 );
 
                 for (std::size_t s = 0; s < pi_gridworld.size(); ++s) {
@@ -62,13 +62,7 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                 break;
             }
             case 2: {
-                auto q_values_gridworld = q_learning(
-                    gridworld, 
-                    10000, 
-                    0.1f, 
-                    0.9f, 
-                    1.0f
-                );
+                auto q_values_gridworld = q_learning(gridworld, num_episodes, learning_rate, gamma, epsilon);
 
                 for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
                     const auto &q_s = q_values_gridworld[s];
@@ -79,11 +73,7 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                 break;
             }
             case 3: {
-                auto value_function_gridworld = value_iteration(
-                    gridworld, 
-                    0.9f, 
-                    0.0001f
-                );
+                auto value_function_gridworld = value_iteration(gridworld, gamma, theta);
 
                 for (std::size_t s = 0; s < value_function_gridworld.size(); ++s) {
                     ss << "V(s=" << s << ") = " << value_function_gridworld[s] << std::endl;
@@ -91,11 +81,7 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
                 break;
             }
             case 4: {
-                auto q_values_gridworld = monte_carlo_es(
-                    gridworld,
-                    10000,    // Number of episodes
-                    0.01f      // Epsilon
-                );
+                auto q_values_gridworld = monte_carlo_es(gridworld, num_episodes, epsilon);
 
                 for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
                     const auto& q_s = q_values_gridworld[s];
@@ -108,9 +94,9 @@ void GridWorldNode::launch_algorithm(int algorithm_type, const int rows, const i
             case 5: {
                 auto [q_values_gridworld, returns_sum_gridworld] = on_policy_first_visit_monte_carlo_control(
                     gridworld,
-                    10000,    // Number of episodes
-                    0.9f,     // Gamma (discount factor)
-                    0.1f      // Epsilon
+                    num_episodes,
+                    gamma,
+                    epsilon
                 );
 
                 for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {

@@ -26,7 +26,7 @@ namespace godot {
         GridWorldNode();
         ~GridWorldNode();
 
-        void launch_algorithm(int algorithm_type, const int rows, const int colums);
+        void launch_algorithm(int algorithm_type, const int rows, const int colums,float gamma, float theta, int num_episodes, float learning_rate, float epsilon);
         bool is_calculation_complete() const;
         String get_result();
 

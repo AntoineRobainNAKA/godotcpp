@@ -10,7 +10,7 @@
 using namespace godot;
 
 void LineWorldNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "cells"), &LineWorldNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "cells", "gamma", "theta", "num_episodes", "learning_rate", "epsilon"), &LineWorldNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &LineWorldNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &LineWorldNode::get_result);
 }
@@ -28,7 +28,7 @@ LineWorldNode::~LineWorldNode() {
     }
 }
 
-void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
+void LineWorldNode::launch_algorithm(int algorithm_type, const int cells, float gamma, float theta, int num_episodes, float learning_rate, float epsilon) {
     // Check if a calculation is already in progress
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
@@ -37,7 +37,7 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
     calculation_pending = true;
 
     // Use a lambda to capture the configuration and choose the algorithm
-    current_calculation = std::async(std::launch::async, [this, algorithm_type, cells]() {
+    current_calculation = std::async(std::launch::async, [this, algorithm_type, cells, gamma, theta, num_episodes, learning_rate, epsilon]() {
         LineWorld lineworld(cells);
         std::stringstream ss;
 
@@ -45,8 +45,8 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
             case 1: {
                 auto [pi_lineworld, value_function_lineworld] = policy_iteration(
                     lineworld, 
-                    0.9f, 
-                    0.0001f
+                    gamma, 
+                    theta
                 );
 
                 for (std::size_t s = 0; s < pi_lineworld.size(); ++s) {
@@ -58,13 +58,7 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
                 break;
             }
             case 2: {
-                auto q_values_lineworld = q_learning(
-                    lineworld, 
-                    10000, 
-                    0.1f, 
-                    0.9f, 
-                    1.0f
-                );
+                auto q_values_lineworld = q_learning(lineworld, num_episodes, learning_rate, gamma, epsilon);
 
                 for (std::size_t s = 0; s < q_values_lineworld.size(); ++s) {
                     const auto &q_s = q_values_lineworld[s];
@@ -75,11 +69,7 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
                 break;
             }
             case 3: {
-                auto value_function_lineworld = value_iteration(
-                    lineworld, 
-                    0.9f, 
-                    0.0001f
-                );
+                auto value_function_lineworld = value_iteration(lineworld, gamma, theta);
 
                 for (std::size_t s = 0; s < value_function_lineworld.size(); ++s) {
                     ss << "V(s=" << s << ") = " << value_function_lineworld[s] << std::endl;
@@ -87,11 +77,7 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
                 break;
             }
             case 4: {
-                auto q_values_gridworld = monte_carlo_es(
-                    lineworld,
-                    10000,    // Number of episodes
-                    0.1f      // Epsilon
-                );
+                auto q_values_gridworld = monte_carlo_es(lineworld, num_episodes, epsilon);
 
                 for (std::size_t s = 0; s < q_values_gridworld.size(); ++s) {
                     const auto& q_s = q_values_gridworld[s];
@@ -104,9 +90,9 @@ void LineWorldNode::launch_algorithm(int algorithm_type, const int cells) {
             case 5: {
                 auto [q_values_lineworld, returns_sum_lineworld] = on_policy_first_visit_monte_carlo_control(
                     lineworld,
-                    10000,
-                    0.9f,
-                    0.1f
+                    num_episodes,
+                    gamma,
+                    epsilon
                 );
                 for (std::size_t s = 0; s < q_values_lineworld.size(); ++s) {
                     const auto& q_s = q_values_lineworld[s];

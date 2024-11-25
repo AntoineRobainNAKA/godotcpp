@@ -8,6 +8,11 @@ extends Control
 @onready var grid_visualizer: GridVisualizer = %GridVisualizer
 @onready var input1: SpinBox = %Input1
 @onready var input2: SpinBox = %Input2
+@onready var gamma: SpinBox = %gamma
+@onready var theta: SpinBox = %theta
+@onready var num_episodes: SpinBox = %num_episodes
+@onready var learning_rate: SpinBox = %learning_rate
+@onready var epsilon: SpinBox = %epsilon
 
 
 # Called when the node enters the scene tree for the first time.
@@ -25,6 +30,11 @@ func _on_start_button_pressed() -> void:
 	print("launching..!")
 	environment_container.launch(
 		environment_dropdown.selected,
-		algorithm_dropdown.selected, 
+		algorithm_dropdown.selected,
+		gamma.value,
+		theta.value,
+		num_episodes.value,
+		learning_rate.value,
+		epsilon.value,
 		int(input1.value), 
 		int(input2.value))

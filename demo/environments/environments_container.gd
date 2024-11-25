@@ -34,6 +34,7 @@ func _process(delta: float) -> void:
 		current_node = null
 
 func launch(environment: Globals.EnvironmentType, algorithm: Globals.AlgorithmType, 
+		gamma: float, theta: float, num_episodes: int, learning_rate: float, epsilon: float,
 		size_x: int, size_y: int = 1) -> void:
 	if algorithm == Globals.AlgorithmType.NONE:
 		return
@@ -48,22 +49,22 @@ func launch(environment: Globals.EnvironmentType, algorithm: Globals.AlgorithmTy
 		Globals.EnvironmentType.LINEWORLD:
 			current_node = lineworldnode
 			num_actions = 2
-			lineworldnode.launch_algorithm(algorithm, size_x)
+			lineworldnode.launch_algorithm(algorithm, size_x, gamma, theta, num_episodes, learning_rate, epsilon)
 			print("launching on lineworld")
 		Globals.EnvironmentType.GRIDWORLD:
 			current_node = gridworldnode
 			num_actions = 4
-			gridworldnode.launch_algorithm(algorithm, size_x, size_y)
+			gridworldnode.launch_algorithm(algorithm, size_x, size_y, gamma, theta, num_episodes, learning_rate, epsilon)
 			print("launching on gridworld")
 		Globals.EnvironmentType.RPS:
 			current_node = rpsnode
 			num_actions = 3
-			rpsnode.launch_algorithm(algorithm)
+			rpsnode.launch_algorithm(algorithm, gamma, theta, num_episodes, learning_rate, epsilon)
 			print("lauching on rps")
 		Globals.EnvironmentType.MONTYHALL:
 			current_node = montyhallnode
 			num_actions = 2
-			montyhallnode.launch_algorithm(algorithm)
+			montyhallnode.launch_algorithm(algorithm, size_x, gamma, theta, num_episodes, learning_rate, epsilon)
 			print("launching on monty hall")
 		Globals.EnvironmentType.SECRETENV0:
 			current_node = secretenv0node

@@ -23,7 +23,7 @@ namespace godot {
         LineWorldNode();
         ~LineWorldNode();
 
-        void launch_algorithm(int algorithm_type, const int cells);
+        void launch_algorithm(int algorithm_type, const int cells, float gamma, float theta, int num_episodes, float learning_rate, float epsilon);
         void launch_policy_iteration(const int cells);
         void launch_q_learning(const int cells);
         void launch_value_iteration(const int cells);

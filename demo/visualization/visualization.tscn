@@ -86,6 +86,61 @@ min_value = 1.0
 value = 1.0
 rounded = true
 
+[node name="Param3" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "Gamma"
+
+[node name="gamma" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.01
+value = 0.9
+
+[node name="Param4" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "Theta"
+
+[node name="theta" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.001
+value = 0.001
+
+[node name="Param5" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "Number of episodes"
+
+[node name="num_episodes" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 100000.0
+step = 1000.0
+value = 10000.0
+rounded = true
+
+[node name="Param6" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "Learning rate"
+
+[node name="learning_rate" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
+layout_mode = 2
+max_value = 1.0
+step = 0.1
+value = 0.1
+
+[node name="Param7" type="Label" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+layout_mode = 2
+text = "Epsilon"
+
+[node name="epsilon" type="SpinBox" parent="HBoxContainer/Controls/VBoxContainer/EnvironmentParams"]
+unique_name_in_owner = true
+layout_mode = 2
+step = 0.1
+value = 1.0
+
 [node name="Algorithm" type="Label" parent="HBoxContainer/Controls/VBoxContainer"]
 layout_mode = 2
 text = "Algorithm"

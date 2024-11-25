@@ -13,7 +13,7 @@
 using namespace godot;
 
 void RPSNode::_bind_methods() {
-    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type"), &RPSNode::launch_algorithm);
+    ClassDB::bind_method(D_METHOD("launch_algorithm", "algorithm_type", "gamma", "theta", "num_episodes", "learning_rate", "epsilon"), &RPSNode::launch_algorithm);
     ClassDB::bind_method(D_METHOD("is_calculation_complete"), &RPSNode::is_calculation_complete);
     ClassDB::bind_method(D_METHOD("get_result"), &RPSNode::get_result);
 }
@@ -28,7 +28,7 @@ RPSNode::~RPSNode() {
     }
 }
 
-void RPSNode::launch_algorithm(int algorithm_type) {
+void RPSNode::launch_algorithm(int algorithm_type, float gamma, float theta, int num_episodes, float learning_rate, float epsilon) {
     // Check if a calculation is already in progress
     if (calculation_pending) {
         UtilityFunctions::print("Calculation already in progress!");
@@ -36,13 +36,13 @@ void RPSNode::launch_algorithm(int algorithm_type) {
     }    
     calculation_pending = true;
 
-    current_calculation = std::async(std::launch::async, [this, algorithm_type]() {
+    current_calculation = std::async(std::launch::async, [this, algorithm_type, gamma, theta, num_episodes, learning_rate, epsilon]() {
         RockPaperScissors rps;
         std::stringstream ss;
 
         switch (algorithm_type) {
             case 1: {
-                auto [pi_rps, value_function_rps] = policy_iteration(rps, 0.9f, 0.0001f);
+                auto [pi_rps, value_function_rps] = policy_iteration(rps, gamma, theta);
 
                 ss << "Policy Iteration Results:\n";
                 for (std::size_t s = 0; s < pi_rps.size(); ++s) {
@@ -62,7 +62,7 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                 break;
             }
             case 2: {
-                auto q_values_rps = q_learning(rps, 10000, 0.1f, 0.9f, 1.0f);
+                auto q_values_rps = q_learning(rps, num_episodes, learning_rate, gamma, epsilon);
 
                 ss << "Q-Learning Results:\n";
                 for (std::size_t s = 0; s < q_values_rps.size(); ++s) {
@@ -85,7 +85,7 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                 break;
             }
             case 3: {
-                auto value_function_rps = value_iteration(rps, 0.9f, 0.0001f);
+                auto value_function_rps = value_iteration(rps, gamma, theta);
 
                 ss << "Value Iteration Results:\n";
                 for (std::size_t s = 0; s < value_function_rps.size(); ++s) {
@@ -104,7 +104,7 @@ void RPSNode::launch_algorithm(int algorithm_type) {
                 break;
             }
             case 4: {
-                auto q_values_rps = monte_carlo_es(rps, 10000, 0.1f);
+                auto q_values_rps = monte_carlo_es(rps, num_episodes, epsilon);
 
                 for (std::size_t s = 0; s < q_values_rps.size(); ++s) {
                     const auto& q_s = q_values_rps[s];
@@ -117,9 +117,9 @@ void RPSNode::launch_algorithm(int algorithm_type) {
             case 5: {
                 auto [q_values_rps, returns_sum_rps] = on_policy_first_visit_monte_carlo_control(
                     rps,
-                    10000,
-                    0.9f,
-                    0.1f
+                    num_episodes,
+                    gamma,
+                    epsilon
                 );
 
                 for (std::size_t s = 0; s < q_values_rps.size(); ++s) {

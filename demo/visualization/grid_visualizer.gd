@@ -75,11 +75,11 @@ func update_visualization(algorithm: Globals.AlgorithmType, result: String, grid
 		Globals.AlgorithmType.VALUE_ITERATION:
 			parse_value_iteration_results(result)
 		Globals.AlgorithmType.Q_LEARNING:
-			parse_q_learning_results(result)
+			parse_q_learning_results(result, num_actions)
 		Globals.AlgorithmType.MONTE_CARLO_ES:
-			parse_q_learning_results(result)
+			parse_q_learning_results(result, num_actions)
 		Globals.AlgorithmType.ON_POLICY_FIRST_VISIT_MC:
-			parse_q_learning_results(result)
+			parse_q_learning_results(result, num_actions)
 		_:
 			print("Didn't match any algorithm !")
 
